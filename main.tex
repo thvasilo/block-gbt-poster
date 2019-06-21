@@ -64,7 +64,8 @@
 \setlength{\topmargin}{-0.5in} % Reduce the top margin size
 %-----------------------------------------------------------
 
-\graphicspath{{./figures/}}
+\graphicspath{{./figures/}{./tables/}}
+
 
 % If your conference documentclass or package defines these macros,
 % change these macros to different names.
@@ -122,8 +123,8 @@
 	
 	\begin{itemize}
 	\item The first algorithm for data \emph{and} feature parallel training of GBTs.
-	\item Adapt the Quickscorer fast prediction algorithm to the
-		block distributed setting.
+%	\item Adapt the Quickscorer fast prediction algorithm to the
+%		block distributed setting.
 	\item We achieve orders of magnitude improved communication cost
 		by taking advantage of data sparsity.
 	\end{itemize}
@@ -137,7 +138,7 @@
 	\begin{block}{Introduction}
 	
 		\textbf{Gradient Boosted Trees}: One of the most widely used algorithms
-		in machine learning, including IR tasks like learning-to-rank
+		in IR tasks like learning-to-rank
 		and CTR prediction.
 	
 		\vspace{15pt}
@@ -146,19 +147,19 @@
 		\begin{itemize}
 			\item We need highly scalable algorithms for enterprise scale, \emph{high-dimensional
 			data}.
-			\item Training on such data is done in clusters, where network communication
-			is the \emph. %TODO Is this why it's important or a problem of SOTA?
-			% Alternative With billions of data points and features, we need to take full advantage of the ...
+			\item Training on such data is done in clusters, where \emph{network communication}
+			is the main bottleneck. %TODO Is this why it's important or a problem of SOTA?
+			% Alternative: "With billions of data points and features, we need to take full advantage of the ..."
 		\end{itemize}
 	
 		\textbf{Why it's difficult:}
 	
 		\begin{itemize}
 	
-		\item All current distributed GBT algorithms \emph{only use row distribution},
+		\item All systems \emph{only use row distribution},
 			and for feature parallel training, assume \emph{all data fit into the memory} of each worker.
-		\item In the block-distributed setting \emph{no worker has a full view} of any data point.
-			This presents additional challenges for training and prediction.
+		\item In addition, they use dense communication, leading to redundant network
+			traffic.
 		\end{itemize}
 	
 	\end{block}
@@ -174,6 +175,44 @@
 	
 	\end{block}
 
+\begin{block}{Block-distributed data}
+	\begin{figure}
+		\centering
+		\begin{subfigure}[t]{0.45\onecolwid}
+			\centering
+			\includegraphics[height=4cm]{w1}
+			\caption{Worker 1.}
+		\end{subfigure}
+		\quad
+		\begin{subfigure}[t]{0.45\onecolwid}
+			\centering
+			\includegraphics[height=4cm]{w2}
+			\caption{Worker 2.}
+		\end{subfigure}
+		\\
+		\vspace{15pt}
+		\begin{subfigure}[t]{0.45\onecolwid}
+			\centering
+			\includegraphics[height=4cm]{w3}
+			\caption{Worker 3.}
+		\end{subfigure}
+		~
+		\begin{subfigure}[t]{0.45\onecolwid}
+			\centering
+			\includegraphics[height=4cm]{w4}
+			\caption{Worker 4.}
+		\end{subfigure}
+		
+		%			\caption{Local gradient histograms for row-distributed data. Note the existence of multiple
+		%				zero values that would nonetheless need to be communicated using a dense communication pattern like
+		%				MPI allreduce.}
+		\label{fig:grad-row-dist}
+	\end{figure}
+	
+	
+\end{block}
+
+
 
 
 %----------------------------------------------------------------------------------------
@@ -184,54 +223,51 @@
 
 \begin{column}{\onecolwid} % Begin second column
 	
-	\begin{block}{Block-distributed data}
-		\begin{figure}
-			\centering
-			\begin{subfigure}[t]{0.45\onecolwid}
-				\centering
-				\includegraphics[height=4cm]{w1}
-				\caption{Worker 1.}
-			\end{subfigure}
-			\quad
-			\begin{subfigure}[t]{0.45\onecolwid}
-				\centering
-				\includegraphics[height=4cm]{w2}
-				\caption{Worker 2.}
-			\end{subfigure}
-			\\
-			\vspace{15pt}
-			\begin{subfigure}[t]{0.45\onecolwid}
-			\centering
-			\includegraphics[height=4cm]{w3}
-			\caption{Worker 3.}
-			\end{subfigure}
-			~
-			\begin{subfigure}[t]{0.45\onecolwid}
-				\centering
-				\includegraphics[height=4cm]{w4}
-				\caption{Worker 4.}
-			\end{subfigure}
-		
-%			\caption{Local gradient histograms for row-distributed data. Note the existence of multiple
-%				zero values that would nonetheless need to be communicated using a dense communication pattern like
-%				MPI allreduce.}
-			\label{fig:grad-row-dist}
-		\end{figure}
-		
-
-	\end{block}
 	
 	
-	\begin{block}{Block-distributed Quickscorer}
-		
-		In the block-distributed setting, prediction requires communication.
-		To minimize the size of the data being communicated we develop
-		a block-distributed version of the Quickscorer algorithm.
+	\begin{block}{Quickscorer}
 		
 		\begin{figure}
 			\includegraphics[width=\onecolwid]{decision_tree_bitstrings}
 %			\caption{Quickscorer example.}
 			\label{fig:quickscorer}
+		\end{figure}
+		
+	\end{block}
+
+	\begin{block}{Block-distributed Quickscorer}
+		
+		\begin{figure}
+			\centering
+			\begin{subfigure}[t]{0.45\onecolwid}
+				\centering
+				\includegraphics[height=4cm]{w1-quickscorer}
+				\caption{Worker 1.}
+			\end{subfigure}
+			\quad
+			\begin{subfigure}[t]{0.45\onecolwid}
+				\centering
+				\includegraphics[height=4cm]{w2-quickscorer}
+				\caption{Worker 2.}
+			\end{subfigure}
+			\\
+			\vspace{15pt}
+			\begin{subfigure}[t]{0.45\onecolwid}
+				\centering
+				\includegraphics[height=4cm]{w3-quickscorer}
+				\caption{Worker 3.}
+			\end{subfigure}
+			~
+			\begin{subfigure}[t]{0.45\onecolwid}
+				\centering
+				\includegraphics[height=4cm]{w4-quickscorer}
+				\caption{Worker 4.}
+			\end{subfigure}
+			
+			%			\caption{Local gradient histograms for row-distributed data. Note the existence of multiple
+			%				zero values that would nonetheless need to be communicated using a dense communication pattern like
+			%				MPI allreduce.}
+			\label{fig:grad-row-dist}
 		\end{figure}
 		
 	\end{block}
@@ -257,7 +293,7 @@
 		
 	\end{block}
 
-	\begin{block}{Gradient Histograms are sparse}
+	\begin{block}{Gradient Histograms are Sparse}
 		\begin{figure}
 			\centering
 			\begin{subfigure}[t]{\textwidth}
@@ -288,7 +324,7 @@
 
 \begin{column}{\onecolwid} % The third column
 	
-	\begin{block}{Sparse communication}
+	\begin{block}{Sparse Communication}
 		
 		We create sparse matrices for the histograms, and communicate
 		those, using the Parameter Server.
@@ -342,9 +378,8 @@
 	\begin{block}{Conclusions}
 	
 		\begin{itemize}
-			\item We developed the first algorithm for block-distributed GBT training.
-			\item Our approach allows for several orders of magnitude improvement in
-				communication costs for highly sparse data.
+			\item Several order of magnitude communication savings
+				are possible for highly sparse data.
 			\item More work needs to be done for dense data to offset the computational
 				overhead of the sparse data structures.
 		\end{itemize}
