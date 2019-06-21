@@ -1,0 +1,32 @@
+\documentclass{standalone}
+
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{colortbl} % Required to have colors for table rows
+\usepackage{colortbl} % Required to have colors for table rows
+
+% Data colors
+\definecolor{CBOne}{HTML}{a6cee3}
+\definecolor{CBTwo}{HTML}{1f78b4}
+\definecolor{CBThree}{HTML}{b2df8a}
+\definecolor{CBFour}{HTML}{33a02c}
+
+
+
+\begin{document}
+	\begin{tabular}{cccc|c}
+		\toprule
+		Index & Feature 1 & Feature 2 & Feature 3 & Gradient \\
+		\midrule
+		\rowcolor{CBOne}
+		1 & 13 & 0 & 488 & 1.5 \\
+		\rowcolor{CBTwo}
+		2 & 7 & 1 & 667 & 2.5 \\
+		\rowcolor{CBThree}
+		3 & 3.5 & 0 & 122 & 2 \\
+		\rowcolor{CBFour}
+		4 & 1.6 & 2 & 366 & 2.5 \\
+		\bottomrule
+	\end{tabular}
+\end{document}
+
