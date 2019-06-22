@@ -33,7 +33,8 @@
 \usepackage{booktabs}
 \usepackage{colortbl} % Required to have colors for table rows
 \usepackage{graphicx}  % Required for including images
-\usepackage{subcaption}
+\usepackage{subcaption} % For subfigures
+\usepackage{wrapfig} 
 
 
 
@@ -168,6 +169,7 @@
 
 	\begin{block}{Gradient Boosted Trees}
 	
+		% TODO: Some pluses look weird.
 		\begin{figure}
 		\includegraphics[width=\onecolwid]{gbt-illustration}
 			\label{fig:gbt-training}
@@ -202,11 +204,6 @@
 			\includegraphics[height=4cm]{w4}
 			\caption{Worker 4.}
 		\end{subfigure}
-		
-		%			\caption{Local gradient histograms for row-distributed data. Note the existence of multiple
-		%				zero values that would nonetheless need to be communicated using a dense communication pattern like
-		%				MPI allreduce.}
-		\label{fig:grad-row-dist}
 	\end{figure}
 	
 	
@@ -417,6 +414,8 @@
 	%	CONTACT INFORMATION
 	%----------------------------------------------------------------------------------------
 	
+	
+
 	\setbeamercolor{block alerted title}{fg=black,bg=norange} % Change the alert block title colors
 	\setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
 	
@@ -427,14 +426,41 @@
 	\item Twitter: \href{https://www.twitter.com/thvasilo}{@thvasilo}
 	\end{itemize}
 	
-	\end{alertblock}
 	
-	\begin{center}
-	\begin{tabular}{ccc}
-	\includegraphics[height=2cm]{rise_logo_horizontal_cmyk.pdf} \hfill & 
-	\includegraphics[height=2cm]{amazon} \hfill & \includegraphics[height=3cm]{kth}
-	\end{tabular}
-	\end{center}
+	\end{alertblock}
+
+	\begin{tikzpicture}[remember picture,overlay]
+	\node[xshift=35cm,yshift=-43cm,anchor=north west] at (current page.center) {\includegraphics[width=3.5cm]{qr-code}};
+	\end{tikzpicture}
+	\begin{tikzpicture}[remember picture,overlay]
+	\node[font=\rmfamily,xshift=31.25cm,yshift=-44.3cm,anchor=north west] at (current page.center) {ArXiv:};
+	\end{tikzpicture}
+
+	
+%	\begin{center}
+%	\begin{tabular}{ccc}
+%	\includegraphics[height=2cm]{rise_logo_horizontal_cmyk.pdf} \hfill & 
+%	\includegraphics[height=2cm]{amazon} \hfill & \includegraphics[height=3.5cm]{kth}
+%	\end{tabular}
+%	\end{center}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[c]{0.3\textwidth}
+		\centering
+		\includegraphics[height=2cm]{rise_logo_horizontal_cmyk}
+	\end{subfigure}
+	~
+	\begin{subfigure}[c]{0.3\textwidth}
+		\centering
+		\includegraphics[height=2cm]{amazon}
+	\end{subfigure}
+	~
+	\begin{subfigure}[c]{0.3\textwidth}
+		\centering
+		\includegraphics[height=3.5cm]{kth}
+	\end{subfigure}
+	\end{figure}
 
 %----------------------------------------------------------------------------------------
 
